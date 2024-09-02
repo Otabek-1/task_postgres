@@ -13,6 +13,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/tasks', controllers.getTasks);
 app.post('/api/tasks', controllers.addTask);
+app.put('/api/tasks/:id', controllers.updateTask);
 app.delete('/api/tasks/:id', controllers.removeTask);
 
 
