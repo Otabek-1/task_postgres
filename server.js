@@ -13,9 +13,10 @@ app.get('/', (req, res) => {
 
 app.get('/api/tasks', controllers.getTasks);
 app.post('/api/tasks', controllers.addTask);
+app.delete('/api/tasks/:id', controllers.removeTask);
 
 
 createDatabase();
-app.listen(3000, ()=> {
-    console.log("App listening on port 3000");
+app.listen(3001, ()=> {
+    console.log("App listening on port 3001");
 })

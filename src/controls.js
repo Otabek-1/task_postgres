@@ -13,7 +13,7 @@ const getTasks = (req, res) => {
 
 const addTask = (req, res) => {
     // Req.body ma'lumotlarini to'g'ri formatda olish
-    const { name, task, is_done } = req.body;
+    const { name, is_done } = req.body;
 
     // Ma'lumotlarning mavjudligini tekshirish
     if (typeof name !== 'string' || !name.trim()) {
@@ -23,8 +23,7 @@ const addTask = (req, res) => {
         return res.status(400).send('is_done must be a boolean value.');
     }
 
-    // Ma'lumotlarni SQL so'roviga qo'shish
-    pool.query(queries.addTask, [name, task || null, is_done], (error, results) => {
+    pool.query(queries.addTask, [name,is_done], (error, results) => {
         if (error) {
             res.status(500).send(error.message);
         } else {
@@ -33,7 +32,28 @@ const addTask = (req, res) => {
     });
 };
 
+
+const removeTask = (req, res) => {
+    console.log(req.params.id)
+    const id  = req.params.id
+    
+    pool.query(queries.checkTask, [id], (error, results)=>{
+        if(error){
+            res.status(500).send(error.message);
+        }
+        if(!results.rows.length){
+            res.status(404).send("Task not found.");
+        }else{
+            pool.query(queries.removeTask, [id], (error,results)=>{
+                if(error) throw error;
+                res.json({ message: 'Task removed successfully' });
+            })
+        }
+    })
+}
+
 module.exports = {
     getTasks,
     addTask,
+    removeTask,
 };
